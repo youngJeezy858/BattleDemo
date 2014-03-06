@@ -120,6 +120,8 @@ public class BattleCanvas extends ECanvas {
    			int currentFrame = player_currentAction.getFrame();
 			if (player_currentAction.getFrame() == frame_hit && enemy_currentAction.getFrame() != 2){
 				//for all enemies
+				
+				boolean hit = false;
 				for (int i = 0; i < frame_hit_x.length; i++){
 					int x = frame_hit_x[i] + player_x - enemy_x;
 					int y = frame_hit_y[i] + player_y - enemy_y;
@@ -130,15 +132,18 @@ public class BattleCanvas extends ECanvas {
 						continue;
 					Color c = frame.getColor(x, y);
 					if (c.a != 0 && enemy_state == ENEMY_READY){
-						enemy_state = ENEMY_BUSY;
 						enemy_health = enemy_health - 10;
-						if (enemy_health <= 0)
-							enemy_currentAction.setCurrentFrame(2);
-						else
-							enemy_currentAction.setCurrentFrame(Math.abs(enemy_currentAction.getFrame() - 1));
-						break;
+						hit = true;
 					}
-				}		
+				}
+				
+				if (hit){
+					enemy_state = ENEMY_BUSY;
+					if (enemy_health <= 0)
+						enemy_currentAction.setCurrentFrame(2);
+					else
+						enemy_currentAction.setCurrentFrame(Math.abs(enemy_currentAction.getFrame() - 1));
+				}
 			}
 			else if (currentFrame == frame_stop){
 				player_state = PLAYER_READY;
